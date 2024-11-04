@@ -1,0 +1,144 @@
+/* Homepage.css */
+
+.banner-section {
+  position: relative;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.banner-content {
+  position: absolute;
+  top: 210px;
+  left: 70px;
+  width: 662px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  text-align: left;
+  color: white;
+  z-index: 10;
+}
+
+.banner-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 57.6px;
+  font-weight: 600;
+  line-height: 77.76px;
+  letter-spacing: 0.05em;
+}
+
+.banner-highlight {
+  color: #8B4513;
+}
+
+.banner-description {
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  max-width: 480px;
+  color: #868F9B;
+}
+
+.help-desk-button {
+  position: fixed;
+  width: 100px;
+  height: 30px;
+  background-color: #868F9B;
+  color: black;
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 2px;
+  top: 50%;
+  right: -35px;
+  transform: translateY(-50%) rotate(90deg);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collection-section {
+  margin-top: 12px;
+  padding-left: 70px;
+}
+
+.collection-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 64.8px;
+  letter-spacing: 0.05em;
+  color: black;
+}
+
+.collection-description {
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 27px;
+  color: black;
+}
+
+.product-container {
+  display: flex;
+  position: relative;
+  margin-top: 6px;
+  gap: 24px;
+  .product {
+    position: relative;
+    width: 342px;
+    height: 560px;
+  }
+}
+
+.view-all-button {
+  position: absolute; /* Position it absolutely within the product container */
+  display: flex;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #AC643E;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-button {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
