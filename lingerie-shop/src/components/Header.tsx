@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Category, initialCategories } from '../models/category';
+import { BASE_URL } from '../config'; // Імпортуйте базовий URL
 import '../styles.scss'; // Імпорт SCSS файлу
 
 const Header = () => {
@@ -9,7 +10,7 @@ const Header = () => {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8080/api/v1/categories')
+      .get(`${BASE_URL}/api/v1/categories`)
       .then((response) => setCategories(response.data))
       .catch((error) => console.error('Error fetching categories', error));
   }, []);

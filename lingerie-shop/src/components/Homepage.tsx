@@ -3,6 +3,7 @@ import axios from 'axios';
 import ShopNowButton from '../images/Primary.button123.png'; // Path to the button image
 import './Homepage.scss'; // Import the SCSS file
 import { Product } from '../models/product';
+import { BASE_URL } from '../config'; // Import BASE_URL from config.ts
 
 const ArrowIcon = ({ color }: { color: string }) => (
   <svg
@@ -29,19 +30,19 @@ const Homepage = () => {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8080/api/v1/products')
+      .get(`${BASE_URL}/api/v1/products`)
       .then((response) => setProducts(response.data))
       .catch((error) => console.error('Error fetching products', error));
 
     axios
-      .get('http://127.0.0.1:8080/api/v1/products/on-sales')
+      .get(`${BASE_URL}/api/v1/products/on-sales`)
       .then((response) => setSales(response.data))
       .catch((error) => console.error('Error fetching sales', error));
   }, []);
 
   const handleCategoryClick = (category: string) => {
     axios
-      .get(`http://127.0.0.1:8080/api/v1/category?name=${category}`)
+      .get(`${BASE_URL}/api/v1/category?name=${category}`)
       .then((response) => {
         setProducts(response.data);
         console.log(`Products in ${category} category`, response.data);
@@ -51,8 +52,6 @@ const Homepage = () => {
 
   return (
     <div style={{ fontFamily: "'Raleway', sans-serif" }}>
-      
-
       <section
         className="banner-section"
         style={{ backgroundImage: "url('/images/banner-background.png')" }}
