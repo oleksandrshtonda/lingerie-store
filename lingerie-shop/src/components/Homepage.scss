@@ -1,4 +1,28 @@
-/* Homepage.css */
+// Homepage.scss
+
+.categories-section {
+  background-color: #EFF0F2; // Бекграунд-колір для секції категорій
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.category-button {
+  font-family: 'Raleway', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #8B4513;
+  }
+}
 
 .banner-section {
   position: relative;
@@ -56,7 +80,6 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
-  letter-spacing: 0.05em;
   text-align: center;
   padding: 2px;
   top: 50%;
@@ -78,7 +101,6 @@
   font-size: 48px;
   font-weight: 600;
   line-height: 64.8px;
-  letter-spacing: 0.05em;
   color: black;
 }
 
@@ -95,15 +117,16 @@
   position: relative;
   margin-top: 6px;
   gap: 24px;
-  .product {
-    position: relative;
-    width: 342px;
-    height: 560px;
-  }
+}
+
+.product {
+  position: relative;
+  width: 342px;
+  height: 560px;
 }
 
 .view-all-button {
-  position: absolute; /* Position it absolutely within the product container */
+  position: absolute;
   display: flex;
   right: 0;
   bottom: 0;
@@ -112,7 +135,6 @@
   font-family: 'Raleway', sans-serif;
   font-size: 18px;
   font-weight: 600;
-  letter-spacing: 0.05em;
   color: #AC643E;
   background: transparent;
   border: none;
@@ -131,11 +153,10 @@
   left: 0;
   width: 100%;
   background-color: black;
-  color: white;
+  color: #EFF0F2;
   font-family: 'Raleway', sans-serif;
   font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.05em;
   text-align: center;
   padding: 12px 0;
   display: flex;

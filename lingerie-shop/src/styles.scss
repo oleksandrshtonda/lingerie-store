@@ -1,0 +1,74 @@
+/* Header Styles */
+.header {
+    width: 100%;
+    background-color: #1F1F21; /* Зміна кольору хедера */
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  
+  .container {
+    padding: 0; /* Виправлено відступи */
+  }
+  
+  .menu-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .menu-text {
+    text-transform: uppercase;
+    color: white;
+  }
+  
+  /* Секція категорій */
+  .categories-section {
+    width: 100%; /* Ширина контейнера */
+    max-width: 1800px; /* Максимальна ширина для обмеження */
+    background-color: #EFF0F2;
+    display: flex;
+    justify-content: space-between; /* Вирівнювання простору між категоріями */
+    align-items: center;
+    padding:  5px 20px; /* Зменшений вертикальний padding для компактності */
+    gap: 2px; /* Відступи між кожною категорією */
+    margin: 0 auto; /* Центрування білого контейнера */
+  }
+  
+  .category-button {
+    font-family: 'Raleway', sans-serif; /* Шрифт для категорій */
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0.05em;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #000;
+    transition: color 0.3s;
+    text-transform: uppercase; /* Всі літери великими */
+    white-space: nowrap; /* Текст в один рядок, не переноситься */
+    flex-shrink: 0; /* Запобігає зменшенню ширини кнопок */
+    margin: 0 5px; /* Відступи між кнопками категорій */
+  
+    &:hover {
+      color: #8B4513;
+    }
+  }
+  
+  /* Відступи для першої та останньої категорії */
+  .category-button:first-child {
+    margin-left: 220px; /* Відступ зліва для першої категорії */
+  }
+  
+  .category-button:last-child {
+    margin-right: 220px; /* Відступ справа для останньої категорії */
+  }
+  

@@ -2,14 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ShopNowButton from '../images/Primary.button123.png'; // Path to the button image
 import './Homepage.scss'; // Import the SCSS file
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-  category: string;
-}
+import { Product } from '../models/product';
 
 const ArrowIcon = ({ color }: { color: string }) => (
   <svg
@@ -41,13 +34,25 @@ const Homepage = () => {
       .catch((error) => console.error('Error fetching products', error));
 
     axios
-      .get('http://127.0.0.1:8080/api/v1/products/on-sales/')
+      .get('http://127.0.0.1:8080/api/v1/products/on-sales')
       .then((response) => setSales(response.data))
       .catch((error) => console.error('Error fetching sales', error));
   }, []);
 
+  const handleCategoryClick = (category: string) => {
+    axios
+      .get(`http://127.0.0.1:8080/api/v1/category?name=${category}`)
+      .then((response) => {
+        setProducts(response.data);
+        console.log(`Products in ${category} category`, response.data);
+      })
+      .catch((error) => console.error(`Error fetching ${category} products`, error));
+  };
+
   return (
     <div style={{ fontFamily: "'Raleway', sans-serif" }}>
+      
+
       <section
         className="banner-section"
         style={{ backgroundImage: "url('/images/banner-background.png')" }}
@@ -93,7 +98,7 @@ const Homepage = () => {
               <ArrowIcon color="white" /> HOME LINEN
             </button>
           </div>
-          <div style={{ position: 'relative'}}>
+          <div style={{ position: 'relative' }}>
             <div className="product" style={{ transform: 'translateY(-90px)' }}>
               <img src="/images/Sleep.wea.picture.png" alt="Sleepwear" className="product-image" />
               <button className="product-button">
