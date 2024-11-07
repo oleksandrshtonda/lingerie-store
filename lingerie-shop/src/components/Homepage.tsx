@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ShopNowButton from '../images/Primary.button123.png'; // Path to the button image
-import './Homepage.scss'; // Import the SCSS file
-import { Product } from '../models/product';
-import { BASE_URL } from '../config'; // Import BASE_URL from config.ts
+import './Homepage.scss';
+import { BASE_URL } from '../config';
+
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+}
 
 const ArrowIcon = ({ color }: { color: string }) => (
   <svg
@@ -24,93 +29,170 @@ const ArrowIcon = ({ color }: { color: string }) => (
   </svg>
 );
 
-const Homepage = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [sales, setSales] = useState<Product[]>([]);
+const Homepage: React.FC = () => {
+  const [newCollectionProducts, setNewCollectionProducts] = useState<Product[]>([]);
+  const [bestSellers, setBestSellers] = useState<Product[]>([]);
+  const [saleProducts, setSaleProducts] = useState<Product[]>([]);
+  const [tailoringProducts, setTailoringProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/v1/products`)
-      .then((response) => setProducts(response.data))
-      .catch((error) => console.error('Error fetching products', error));
+      .get(`${BASE_URL}/api/v1/products?filter=new-collection&start=5&limit=4`)
+      .then(response => setNewCollectionProducts(response.data))
+      .catch(error => console.error('Error fetching new collection products', error));
+
+    axios
+      .get(`${BASE_URL}/api/v1/products?filter=best-sellers`)
+      .then(response => setBestSellers(response.data))
+      .catch(error => console.error('Error fetching best sellers', error));
 
     axios
       .get(`${BASE_URL}/api/v1/products/on-sales`)
-      .then((response) => setSales(response.data))
-      .catch((error) => console.error('Error fetching sales', error));
+      .then(response => setSaleProducts(response.data))
+      .catch(error => console.error('Error fetching sale products', error));
+
+    axios
+      .get(`${BASE_URL}/api/v1/products?filter=tailoring`)
+      .then(response => setTailoringProducts(response.data))
+      .catch(error => console.error('Error fetching tailoring products', error));
   }, []);
 
-  const handleCategoryClick = (category: string) => {
-    axios
-      .get(`${BASE_URL}/api/v1/category?name=${category}`)
-      .then((response) => {
-        setProducts(response.data);
-        console.log(`Products in ${category} category`, response.data);
-      })
-      .catch((error) => console.error(`Error fetching ${category} products`, error));
-  };
-
   return (
-    <div style={{ fontFamily: "'Raleway', sans-serif" }}>
-      <section
-        className="banner-section"
-        style={{ backgroundImage: "url('/images/banner-background.png')" }}
-      >
-        <div className="banner-overlay"></div>
+    <div className="homepage">
+      {/* Banner Section */}
+      <section className="banner-section">
         <div className="banner-content">
           <h1 className="banner-title">
-            BREAK PATTERNS <br />
-            <span className="banner-highlight">TOGETHER WITH US</span>
+            BREAK PATTERNS <span className="highlight">WITH US</span>
           </h1>
           <p className="banner-description">
             In our store, you can buy ready-made designer underwear or bring to life any of your sketches. Also, you can choose a gift for your loved one.
           </p>
-          <img src={ShopNowButton} alt="Shop Now Button" className="mt-4" />
+          <button className="shop-now-button">
+            <ArrowIcon color="white" /> SHOP NOW
+          </button>
         </div>
         <div className="help-desk-button">HELP DESK</div>
       </section>
 
+      {/* New Collection Section */}
       <section className="collection-section">
-        <h2 className="collection-title">New Collection</h2>
-        <p className="collection-description">
-          It is created for real connoisseurs of simplicity.
-        </p>
-
-        <div className="product-container">
-          <div className="product">
-            <img src="/images/Sets-picture.png" alt="Sets" className="product-image" />
-            <button className="product-button">
-              <ArrowIcon color="white" /> SETS
-            </button>
-          </div>
-
-          <div className="product">
-            <img src="/images/Swimwear-picture.png" alt="Swimwear" className="product-image" />
-            <button className="product-button">
-              <ArrowIcon color="white" /> SWIMWEAR
-            </button>
-          </div>
-
-          <div className="product" style={{ transform: 'translateY(-90px)' }}>
-            <img src="/images/Home.linen.png" alt="Home Linen" className="product-image" />
-            <button className="product-button">
-              <ArrowIcon color="white" /> HOME LINEN
-            </button>
-          </div>
-          <div style={{ position: 'relative' }}>
-            <div className="product" style={{ transform: 'translateY(-90px)' }}>
-              <img src="/images/Sleep.wea.picture.png" alt="Sleepwear" className="product-image" />
+        <h2 className="section-title">New Collection</h2>
+        <p className="section-subtitle">It is created for real connoisseurs of simplicity.</p>
+        <div className="product-grid">
+          {newCollectionProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <img src={product.image} alt={product.name} className="product-image" />
               <button className="product-button">
-                <ArrowIcon color="white" /> SLEEPWEAR
+                <ArrowIcon color="white" /> {product.name.toUpperCase()}
               </button>
             </div>
-            <button className="view-all-button">
-              <ArrowIcon color="#AC643E" />
-              <span>VIEW ALL COLLECTIONS</span>
-            </button>
+          ))}
+        </div>
+        <button className="view-all-button">
+          <ArrowIcon color="#AC643E" /> VIEW ALL COLLECTIONS
+        </button>
+      </section>
+
+      {/* Best-Sellers Section */}
+      <section className="best-sellers-section">
+        <h2 className="section-title">Best-Sellers</h2>
+        <div className="product-grid">
+          {bestSellers.map((product) => (
+            <div key={product.id} className="product-card">
+              <img src={product.image} alt={product.name} className="product-image" />
+              <div className="product-info">
+                <p>{product.name}</p>
+                <p>${product.price.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="view-all-button">
+          <ArrowIcon color="#AC643E" /> VIEW ALL POSITIONS
+        </button>
+      </section>
+
+      {/* Sale Section */}
+      <section className="sale-section">
+        <h2 className="section-title">Sale</h2>
+        <div className="product-grid">
+          {saleProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <img src={product.image} alt={product.name} className="product-image" />
+              <div className="product-info">
+                <p>{product.name}</p>
+                <p>${product.price.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="view-all-button">
+          <ArrowIcon color="#AC643E" /> VIEW ALL POSITIONS
+        </button>
+      </section>
+
+      {/* Tailoring For You Section */}
+      <section className="tailoring-section">
+        <h2 className="section-title">Tailoring For You</h2>
+        <p className="section-subtitle">Provide us with any sketch that has sunk into your soul, and our craftsmen will bring it to life in a short time.</p>
+        <button className="add-sketch-button">
+          <ArrowIcon color="#AC643E" /> ADD SKETCH
+        </button>
+        <div className="tailoring-grid">
+          {tailoringProducts.map((product) => (
+            <div key={product.id} className="product-card">
+              <img src={product.image} alt={product.name} className="product-image" />
+              <div className="product-info">
+                <p>{product.name}</p>
+                <p>${product.price.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Our Shop Advantages */}
+      <section className="shop-advantages-section">
+        <h3 className="section-title">Our Shop Advantages</h3>
+        <div className="advantages-grid">
+          <div className="advantage">
+            <img src="/icons/free-shipping.png" alt="Free Shipping" />
+            <p>Free Shipping</p>
+          </div>
+          <div className="advantage">
+            <img src="/icons/secure-payment.png" alt="Secure Payment" />
+            <p>Secure Payment</p>
+          </div>
+          <div className="advantage">
+            <img src="/icons/bonuses.png" alt="Bonuses" />
+            <p>Purchase Bonuses</p>
+          </div>
+          <div className="advantage">
+            <img src="/icons/easy-return.png" alt="Easy Return" />
+            <p>Easy Return</p>
           </div>
         </div>
       </section>
+
+      {/* About Us Section */}
+      <section className="about-us-section">
+        <h3 className="section-title">Few Words About Us</h3>
+        <p className="section-subtitle">We care about women and create a great service to make them feel comfortable in the right lingerie.</p>
+        <button className="instagram-button">
+          <ArrowIcon color="#AC643E" /> OUR INSTAGRAM
+        </button>
+        <div className="instagram-photos">
+          <img src="/images/instagram1.png" alt="Instagram 1" />
+          <img src="/images/instagram2.png" alt="Instagram 2" />
+          <img src="/images/instagram3.png" alt="Instagram 3" />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <p>© 2024. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
