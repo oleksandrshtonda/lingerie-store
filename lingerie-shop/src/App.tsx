@@ -5,9 +5,9 @@ import Search from './pages/Search';
 import Profile from './pages/Profile';
 import Favorites from './pages/Favorites';
 import Cart from './pages/Cart';
-// Виправлений шлях до Homepage
+// Виправлений шлях до Homepage та CatalogPage
 import Homepage from './components/Homepage';
-
+import CatalogPage from './components/CatalogPage'; // Доданий компонент CatalogPage
 
 const App = () => {
   return (
@@ -23,6 +23,9 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/cart" element={<Cart />} />
+
+          {/* Сторінка каталогу */}
+          <Route path="/catalog" element={<CatalogPage />} /> {/* Додано маршрут для каталогу */}
           
           {/* Додаткові сторінки або категорії */}
           {/* Наприклад, сторінки категорій */}

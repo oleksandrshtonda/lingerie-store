@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Додаємо Link для навігації
 import './Homepage.scss';
 import { BASE_URL } from '../config';
 
@@ -10,6 +11,7 @@ interface Product {
   price: number;
 }
 
+// Component for Arrow Icon
 const ArrowIcon = ({ color }: { color: string }) => (
   <svg
     width="24"
@@ -35,6 +37,7 @@ const Homepage: React.FC = () => {
   const [saleProducts, setSaleProducts] = useState<Product[]>([]);
   const [tailoringProducts, setTailoringProducts] = useState<Product[]>([]);
 
+  // Fetch data for different product categories
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/v1/products?filter=new-collection&start=5&limit=4`)
@@ -68,9 +71,10 @@ const Homepage: React.FC = () => {
           <p className="banner-description">
             In our store, you can buy ready-made designer underwear or bring to life any of your sketches. Also, you can choose a gift for your loved one.
           </p>
-          <button className="shop-now-button">
-            <ArrowIcon color="white" /> SHOP NOW
-          </button>
+          {/* Зміна: Використовуємо Link для переходу на /catalog */}
+          <Link to="/catalog" className="shop-now-button">
+            <ArrowIcon color="#1F1F21" /> SHOP NOW
+          </Link>
         </div>
         <div className="help-desk-button">HELP DESK</div>
       </section>
@@ -152,24 +156,24 @@ const Homepage: React.FC = () => {
         </div>
       </section>
 
-      {/* Our Shop Advantages */}
+      {/* Shop Advantages Section */}
       <section className="shop-advantages-section">
         <h3 className="section-title">Our Shop Advantages</h3>
         <div className="advantages-grid">
           <div className="advantage">
-            <img src="/icons/free-shipping.png" alt="Free Shipping" />
+            <img src="/images/free-shipping.png" alt="Free Shipping" />
             <p>Free Shipping</p>
           </div>
           <div className="advantage">
-            <img src="/icons/secure-payment.png" alt="Secure Payment" />
+            <img src="/images/secure-payment.png" alt="Secure Payment" />
             <p>Secure Payment</p>
           </div>
           <div className="advantage">
-            <img src="/icons/bonuses.png" alt="Bonuses" />
+            <img src="/images/bonuses.png" alt="Bonuses" />
             <p>Purchase Bonuses</p>
           </div>
           <div className="advantage">
-            <img src="/icons/easy-return.png" alt="Easy Return" />
+            <img src="/images/easy-return.png" alt="Easy Return" />
             <p>Easy Return</p>
           </div>
         </div>
@@ -191,6 +195,46 @@ const Homepage: React.FC = () => {
 
       {/* Footer */}
       <footer className="footer">
+        <div className="footer-content">
+          <div className="contact-info">
+            <p>Free hotline:</p>
+            <p className="phone-number">8 888 888-88-88</p>
+            <div className="social-icons">
+              <img src="/images/facebook.png" alt="Facebook" />
+              <img src="/images/instagram.png" alt="Instagram" />
+              <img src="/images/twitter.png" alt="Twitter" />
+            </div>
+          </div>
+          <div className="footer-links">
+            <p>TIPS FOR BUYER</p>
+            <p>What is my size?</p>
+            <p>Panty shapes</p>
+            <p>Bra shapes</p>
+            <p>Laundry care</p>
+            <p>Help desk</p>
+          </div>
+          <div className="footer-links">
+            <p>CATALOGUE</p>
+            <p>Bras</p>
+            <p>Panties</p>
+            <p>Swimwear</p>
+            <p>Sleepwear</p>
+            <p>Home linen</p>
+          </div>
+          <div className="footer-links">
+            <p>INFORMATION</p>
+            <p>About us</p>
+            <p>Contacts</p>
+            <p>Order Status</p>
+            <p>Privacy policy</p>
+            <p>Terms of use</p>
+          </div>
+          <div className="subscribe-section">
+            <p>SUBSCRIBE TO NEWS</p>
+            <input type="email" className="email-input" placeholder="Enter your e-mail" />
+            <button className="subscribe-button">SUBSCRIBE</button>
+          </div>
+        </div>
         <p>© 2024. All rights reserved.</p>
       </footer>
     </div>
