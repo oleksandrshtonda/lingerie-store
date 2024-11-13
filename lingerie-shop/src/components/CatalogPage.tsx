@@ -37,7 +37,7 @@ const CatalogPage: React.FC = () => {
 
   return (
     <div className="catalog-page">
-      {/* Фільтри */}
+      {/* Sidebar Filters */}
       <aside className="filters">
         <h3>Filters</h3>
         <div className="filter-section">
@@ -50,7 +50,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="brand" value="Calvin Klein" onChange={handleFilterChange} />
             Calvin Klein
           </label>
-          {/* Інші бренди */}
+          {/* Add other brands as necessary */}
         </div>
         <div className="filter-section">
           <h4>Color</h4>
@@ -62,7 +62,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="color" value="White" onChange={handleFilterChange} />
             White
           </label>
-          {/* Інші кольори */}
+          {/* Add other colors as necessary */}
         </div>
         <div className="filter-section">
           <h4>Size</h4>
@@ -74,7 +74,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="size" value="M" onChange={handleFilterChange} />
             M
           </label>
-          {/* Інші розміри */}
+          {/* Add other sizes as necessary */}
         </div>
         <div className="filter-section">
           <h4>Price</h4>
@@ -95,7 +95,7 @@ const CatalogPage: React.FC = () => {
         </div>
       </aside>
 
-      {/* Сітка товарів */}
+      {/* Product Grid */}
       <section className="product-grid">
         <h2>Catalog of Sets</h2>
         <div className="products">
@@ -113,11 +113,61 @@ const CatalogPage: React.FC = () => {
         <button className="load-more-button">+ VIEW MORE ITEMS</button>
       </section>
 
-      {/* Банер внизу */}
-      <section className="gift-banner">
-        <h2>Gifts are always nice</h2>
-        <button className="learn-more-button">LEARN MORE</button>
-      </section>
+      {/* Bottom Section */}
+      <div className="bottom-section">
+        {/* Gift Banner */}
+        <section className="gift-banner">
+          <h2>Gifts are always nice</h2>
+          <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
+          <button className="learn-more-button">LEARN MORE</button>
+        </section>
+
+        {/* Full Footer */}
+        <footer>
+          <div className="footer-content">
+            <div className="footer-section">
+              <img src="/images/LOGO.png" alt="Lingerie Logo" className="footer-logo" />
+              <p>Free hotline:</p>
+              <p className="phone-number">8 888 888-88-88</p>
+              <div className="social-icons">
+                <img src="/images/facebook.png" alt="Facebook" />
+                <img src="/images/instagram.png" alt="Instagram" />
+                <img src="/images/twitter.png" alt="Twitter" />
+              </div>
+            </div>
+            <div className="footer-links">
+              <h4>TIPS FOR BUYER</h4>
+              <p>What is my size?</p>
+              <p>Panty shapes</p>
+              <p>Bra shapes</p>
+              <p>Laundry care</p>
+              <p>Help desk</p>
+            </div>
+            <div className="footer-links">
+              <h4>CATALOGUE</h4>
+              <p>Bras</p>
+              <p>Panties</p>
+              <p>Swimwear</p>
+              <p>Sleepwear</p>
+              <p>Home linen</p>
+            </div>
+            <div className="footer-links">
+              <h4>INFORMATION</h4>
+              <p>About us</p>
+              <p>Contacts</p>
+              <p>Order Status</p>
+              <p>Privacy policy</p>
+              <p>Terms of use</p>
+            </div>
+            <div className="subscribe-section">
+              <h4>SUBSCRIBE TO NEWS</h4>
+              <p>Subscribe to receive news about trends, collections and new promotions.</p>
+              <input type="email" className="email-input" placeholder="Enter your e-mail" />
+              <button className="subscribe-button">SUBSCRIBE</button>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };
