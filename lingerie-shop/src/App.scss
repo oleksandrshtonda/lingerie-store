@@ -1,4 +1,7 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   text-align: center;
 }
 
@@ -28,6 +31,7 @@
   color: #61dafb;
 }
 
+/* Анімація */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,4 +39,28 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Стилі футера */
+.footer {
+  background-color: rgba(0, 0, 0, 0); /* Прозорий фон */
+  color: #000; /* Чорний текст */
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  margin-top: auto; /* Відштовхує футер донизу */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px;
+}
+
+.social-icons img {
+  width: 20px;
+  height: 20px;
+  margin: 0 8px;
 }

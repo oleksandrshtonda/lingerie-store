@@ -1,72 +1,65 @@
+// src/components/Footer.tsx
+
 import React from 'react';
+import './Footer.scss';
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-10">
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+    <footer className="footer">
+      <div className="footer-content">
         {/* Логотип та контактна інформація */}
-        <div className="flex flex-col items-center md:items-start">
-          <img src="/images/LOGO.png" alt="Lingerie Logo" className="h-10 mb-4" />
-          <p className="text-lg font-semibold">Free hotline:</p>
-          <p className="text-xl font-bold">8 888 888-88-88</p>
-          <div className="flex space-x-4 mt-4">
-            <img src="/images/youtube.png" alt="YouTube" className="w-6 h-6" />
-            <img src="/images/instagram.png" alt="Instagram" className="w-6 h-6" />
-            <img src="/images/facebook.png" alt="Facebook" className="w-6 h-6" />
-            <img src="/images/twitter.png" alt="Twitter" className="w-6 h-6" />
+        <div className="footer-section contact-info">
+          <img src="/images/LOGO1.png" alt="Lingerie Logo" className="footer-logo" />
+          <p className="hotline">Free hotline:</p>
+          <p className="phone-number">8 888 888-88-88</p>
+          <div className="social-icons">
+            <img src="/images/youtube.png" alt="YouTube" />
+            <img src="/images/instagram.png" alt="Instagram" />
+            <img src="/images/facebook.png" alt="Facebook" />
+            <img src="/images/twitter.png" alt="Twitter" />
           </div>
         </div>
 
         {/* Інформація для покупців */}
-        <div>
-          <h3 className="font-semibold mb-3">TIPS FOR BUYER</h3>
-          <ul className="space-y-2">
-            <li>What is my size?</li>
-            <li>Panty shapes</li>
-            <li>Bra shapes</li>
-            <li>Laundry care</li>
-            <li>Help desk</li>
-          </ul>
+        <div className="footer-section footer-links">
+          <h4>TIPS FOR BUYER</h4>
+          <p>What is my size?</p>
+          <p>Panty shapes</p>
+          <p>Bra shapes</p>
+          <p>Laundry care</p>
+          <p>Help desk</p>
         </div>
 
         {/* Каталог */}
-        <div>
-          <h3 className="font-semibold mb-3">CATALOGUE</h3>
-          <ul className="space-y-2">
-            <li>Bras</li>
-            <li>Panties</li>
-            <li>Swimwear</li>
-            <li>Sleepwear</li>
-            <li>Home linen</li>
-          </ul>
+        <div className="footer-section footer-links">
+          <h4>CATALOGUE</h4>
+          <p>Bras</p>
+          <p>Panties</p>
+          <p>Swimwear</p>
+          <p>Sleepwear</p>
+          <p>Home linen</p>
         </div>
 
         {/* Інформація */}
-        <div>
-          <h3 className="font-semibold mb-3">INFORMATION</h3>
-          <ul className="space-y-2">
-            <li>About us</li>
-            <li>Contacts</li>
-            <li>Order Status</li>
-            <li>Privacy policy</li>
-            <li>Terms of use</li>
-          </ul>
+        <div className="footer-section footer-links">
+          <h4>INFORMATION</h4>
+          <p>About us</p>
+          <p>Contacts</p>
+          <p>Order Status</p>
+          <p>Privacy policy</p>
+          <p>Terms of use</p>
         </div>
 
         {/* Підписка на новини */}
-        <div className="mt-8 md:mt-0">
-          <h3 className="font-semibold mb-3">SUBSCRIBE TO NEWS</h3>
-          <p className="text-sm mb-4">Subscribe to receive news about trends, collections, and new promotions.</p>
-          <form className="flex flex-col space-y-2">
-            <input type="email" placeholder="Enter your e-mail" className="px-4 py-2 rounded text-black" />
-            <button className="bg-white text-black font-semibold py-2 px-4 rounded hover:bg-gray-300">
-              SUBSCRIBE
-            </button>
-          </form>
+        <div className="footer-section subscribe-section">
+          <h4>SUBSCRIBE TO NEWS</h4>
+          <p>Subscribe to receive news about trends, collections and new promotions.</p>
+          <input type="email" className="email-input" placeholder="Enter your e-mail" />
+          <button className="subscribe-button">SUBSCRIBE</button>
         </div>
       </div>
 
-      <div className="text-center mt-8">
+      <div className="footer-bottom">
         <p>© 2024 Lingerie. All rights reserved.</p>
       </div>
     </footer>

@@ -5,6 +5,8 @@ import Search from './pages/Search';
 import Profile from './pages/Profile';
 import Favorites from './pages/Favorites';
 import Cart from './pages/Cart';
+
+import Footer from './components/Footer';  // Імпортуємо футер
 // Виправлений шлях до Homepage та CatalogPage
 import Homepage from './components/Homepage';
 import CatalogPage from './components/CatalogPage'; // Доданий компонент CatalogPage

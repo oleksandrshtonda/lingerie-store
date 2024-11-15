@@ -1,3 +1,4 @@
+// CatalogPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CatalogPage.scss';
@@ -15,6 +16,7 @@ interface Product {
 }
 
 const CatalogPage: React.FC = () => {
+  // Стан для продуктів та фільтрів
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedFilters, setSelectedFilters] = useState({
     brand: '',
@@ -23,6 +25,7 @@ const CatalogPage: React.FC = () => {
     priceRange: [0, 500],
   });
 
+  // Завантаження продуктів при завантаженні сторінки
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/v1/products`)
@@ -30,6 +33,7 @@ const CatalogPage: React.FC = () => {
       .catch(error => console.error('Error fetching products', error));
   }, []);
 
+  // Обробка зміни фільтрів
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSelectedFilters({ ...selectedFilters, [name]: value });
@@ -37,7 +41,7 @@ const CatalogPage: React.FC = () => {
 
   return (
     <div className="catalog-page">
-      {/* Sidebar Filters */}
+      {/* Бокова панель з фільтрами */}
       <aside className="filters">
         <h3>Filters</h3>
         <div className="filter-section">
@@ -50,7 +54,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="brand" value="Calvin Klein" onChange={handleFilterChange} />
             Calvin Klein
           </label>
-          {/* Add other brands as necessary */}
+          {/* Додаткові бренди за потреби */}
         </div>
         <div className="filter-section">
           <h4>Color</h4>
@@ -62,7 +66,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="color" value="White" onChange={handleFilterChange} />
             White
           </label>
-          {/* Add other colors as necessary */}
+          {/* Додаткові кольори за потреби */}
         </div>
         <div className="filter-section">
           <h4>Size</h4>
@@ -74,7 +78,7 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="size" value="M" onChange={handleFilterChange} />
             M
           </label>
-          {/* Add other sizes as necessary */}
+          {/* Додаткові розміри за потреби */}
         </div>
         <div className="filter-section">
           <h4>Price</h4>
@@ -95,7 +99,7 @@ const CatalogPage: React.FC = () => {
         </div>
       </aside>
 
-      {/* Product Grid */}
+      {/* Сітка продуктів */}
       <section className="product-grid">
         <h2>Catalog of Sets</h2>
         <div className="products">
@@ -113,23 +117,24 @@ const CatalogPage: React.FC = () => {
         <button className="load-more-button">+ VIEW MORE ITEMS</button>
       </section>
 
-      {/* Bottom Section */}
+      {/* Нижня частина сторінки */}
       <div className="bottom-section">
-        {/* Gift Banner */}
+        {/* Банер подарунків */}
         <section className="gift-banner">
           <h2>Gifts are always nice</h2>
           <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
           <button className="learn-more-button">LEARN MORE</button>
         </section>
 
-        {/* Full Footer */}
-        <footer>
+        {/* Футер */}
+        <footer className="footer">
           <div className="footer-content">
             <div className="footer-section">
-              <img src="/images/LOGO.png" alt="Lingerie Logo" className="footer-logo" />
+              <img src="/images/LOGO1.png" alt="Lingerie Logo" className="footer-logo" />
               <p>Free hotline:</p>
               <p className="phone-number">8 888 888-88-88</p>
               <div className="social-icons">
+                <img src="/images/youtube.png" alt="YouTube" />
                 <img src="/images/facebook.png" alt="Facebook" />
                 <img src="/images/instagram.png" alt="Instagram" />
                 <img src="/images/twitter.png" alt="Twitter" />
@@ -161,10 +166,13 @@ const CatalogPage: React.FC = () => {
             </div>
             <div className="subscribe-section">
               <h4>SUBSCRIBE TO NEWS</h4>
-              <p>Subscribe to receive news about trends, collections and new promotions.</p>
+              <p>Subscribe to receive news about trends, collections, and new promotions.</p>
               <input type="email" className="email-input" placeholder="Enter your e-mail" />
               <button className="subscribe-button">SUBSCRIBE</button>
             </div>
+          </div>
+          <div className="footer-bottom">
+            <p>© 2024 Lingerie. All rights reserved.</p>
           </div>
         </footer>
       </div>
