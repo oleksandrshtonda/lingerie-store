@@ -1,5 +1,3 @@
-// src/components/Footer.tsx
-
 import React from 'react';
 import './Footer.scss';
 
@@ -7,7 +5,6 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        {/* Логотип та контактна інформація */}
         <div className="footer-section contact-info">
           <img src="/images/LOGO1.png" alt="Lingerie Logo" className="footer-logo" />
           <p className="hotline">Free hotline:</p>
@@ -20,7 +17,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Інформація для покупців */}
         <div className="footer-section footer-links">
           <h4>TIPS FOR BUYER</h4>
           <p>What is my size?</p>
@@ -30,7 +26,6 @@ const Footer = () => {
           <p>Help desk</p>
         </div>
 
-        {/* Каталог */}
         <div className="footer-section footer-links">
           <h4>CATALOGUE</h4>
           <p>Bras</p>
@@ -40,7 +35,6 @@ const Footer = () => {
           <p>Home linen</p>
         </div>
 
-        {/* Інформація */}
         <div className="footer-section footer-links">
           <h4>INFORMATION</h4>
           <p>About us</p>
@@ -50,7 +44,6 @@ const Footer = () => {
           <p>Terms of use</p>
         </div>
 
-        {/* Підписка на новини */}
         <div className="footer-section subscribe-section">
           <h4>SUBSCRIBE TO NEWS</h4>
           <p>Subscribe to receive news about trends, collections and new promotions.</p>

@@ -1,0 +1,28 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Breadcrumb.scss';
+
+interface BreadcrumbProps {
+  paths: { label: string; path: string }[];
+}
+
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ paths }) => {
+  return (
+    <nav className="breadcrumb">
+      {paths.map((path, index) => (
+        <span key={index} className="breadcrumb-item">
+          {index < paths.length - 1 ? (
+            <>
+              <Link to={path.path}>{path.label}</Link>
+              <span className="breadcrumb-separator">•</span>
+            </>
+          ) : (
+            <span className="breadcrumb-current">{path.label}</span>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+};
+
+export default Breadcrumb;

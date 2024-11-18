@@ -1,16 +1,29 @@
-// Favorites.tsx
 import React from 'react';
-import Footer from '../components/Footer'; // Імпортуємо футер
+import { useFavorites } from '../store/FavoritesContext';
+import './Favorites.scss';
 
 const Favorites: React.FC = () => {
+  const { favorites, removeFromFavorites } = useFavorites();
+
   return (
     <div className="favorites-page">
-      <h1>Favorites</h1>
-      <p>Your favorite products will appear here.</p>
-      
-      {/* Тут можна додати список улюблених продуктів */}
-      
-      <Footer /> {/* Додаємо футер */}
+      <h2>Your Favorites</h2>
+      <div className="favorites-grid">
+        {favorites.length > 0 ? (
+          favorites.map((product) => (
+            <div key={product.id} className="favorite-card">
+              <img src={product.image} alt={product.name} />
+              <div className="favorite-info">
+                <p>{product.name}</p>
+                <p>${product.price}</p>
+              </div>
+              <button onClick={() => removeFromFavorites(product.id)}>Remove</button>
+            </div>
+          ))
+        ) : (
+          <p>No favorites added yet!</p>
+        )}
+      </div>
     </div>
   );
 };

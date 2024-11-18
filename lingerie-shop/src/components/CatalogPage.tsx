@@ -1,6 +1,8 @@
-// CatalogPage.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Breadcrumb from '../components/Breadcrumb';
+import Footer from '../components/Footer';
+import { useFavorites } from '../store/FavoritesContext';
 import './CatalogPage.scss';
 import { BASE_URL } from '../config';
 
@@ -16,7 +18,6 @@ interface Product {
 }
 
 const CatalogPage: React.FC = () => {
-  // Стан для продуктів та фільтрів
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedFilters, setSelectedFilters] = useState({
     brand: '',
@@ -25,15 +26,14 @@ const CatalogPage: React.FC = () => {
     priceRange: [0, 500],
   });
 
-  // Завантаження продуктів при завантаженні сторінки
+  const { addToFavorites } = useFavorites(); // Додаємо функцію addToFavorites
+
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/v1/products`)
       .then(response => setProducts(response.data))
       .catch(error => console.error('Error fetching products', error));
   }, []);
-
-  // Обробка зміни фільтрів
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setSelectedFilters({ ...selectedFilters, [name]: value });
@@ -41,6 +41,15 @@ const CatalogPage: React.FC = () => {
 
   return (
     <div className="catalog-page">
+      {/* Breadcrumb для навігації */}
+      <Breadcrumb
+        paths={[
+          { label: 'Home', path: '/' },
+          { label: 'Catalog', path: '/catalog' },
+          { label: 'Sets', path: '/catalog/sets' },
+        ]}
+      />
+
       {/* Бокова панель з фільтрами */}
       <aside className="filters">
         <h3>Filters</h3>
@@ -54,7 +63,6 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="brand" value="Calvin Klein" onChange={handleFilterChange} />
             Calvin Klein
           </label>
-          {/* Додаткові бренди за потреби */}
         </div>
         <div className="filter-section">
           <h4>Color</h4>
@@ -66,7 +74,6 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="color" value="White" onChange={handleFilterChange} />
             White
           </label>
-          {/* Додаткові кольори за потреби */}
         </div>
         <div className="filter-section">
           <h4>Size</h4>
@@ -78,7 +85,6 @@ const CatalogPage: React.FC = () => {
             <input type="checkbox" name="size" value="M" onChange={handleFilterChange} />
             M
           </label>
-          {/* Додаткові розміри за потреби */}
         </div>
         <div className="filter-section">
           <h4>Price</h4>
@@ -115,69 +121,20 @@ const CatalogPage: React.FC = () => {
           ))}
         </div>
         <button className="load-more-button">+ VIEW MORE ITEMS</button>
-      </section>
-
-      {/* Нижня частина сторінки */}
-      <div className="bottom-section">
-        {/* Банер подарунків */}
-        <section className="gift-banner">
-          <h2>Gifts are always nice</h2>
-          <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
-          <button className="learn-more-button">LEARN MORE</button>
         </section>
 
-        {/* Футер */}
-        <footer className="footer">
-          <div className="footer-content">
-            <div className="footer-section">
-              <img src="/images/LOGO1.png" alt="Lingerie Logo" className="footer-logo" />
-              <p>Free hotline:</p>
-              <p className="phone-number">8 888 888-88-88</p>
-              <div className="social-icons">
-                <img src="/images/youtube.png" alt="YouTube" />
-                <img src="/images/facebook.png" alt="Facebook" />
-                <img src="/images/instagram.png" alt="Instagram" />
-                <img src="/images/twitter.png" alt="Twitter" />
-              </div>
-            </div>
-            <div className="footer-links">
-              <h4>TIPS FOR BUYER</h4>
-              <p>What is my size?</p>
-              <p>Panty shapes</p>
-              <p>Bra shapes</p>
-              <p>Laundry care</p>
-              <p>Help desk</p>
-            </div>
-            <div className="footer-links">
-              <h4>CATALOGUE</h4>
-              <p>Bras</p>
-              <p>Panties</p>
-              <p>Swimwear</p>
-              <p>Sleepwear</p>
-              <p>Home linen</p>
-            </div>
-            <div className="footer-links">
-              <h4>INFORMATION</h4>
-              <p>About us</p>
-              <p>Contacts</p>
-              <p>Order Status</p>
-              <p>Privacy policy</p>
-              <p>Terms of use</p>
-            </div>
-            <div className="subscribe-section">
-              <h4>SUBSCRIBE TO NEWS</h4>
-              <p>Subscribe to receive news about trends, collections, and new promotions.</p>
-              <input type="email" className="email-input" placeholder="Enter your e-mail" />
-              <button className="subscribe-button">SUBSCRIBE</button>
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>© 2024 Lingerie. All rights reserved.</p>
-          </div>
-        </footer>
-      </div>
-    </div>
-  );
+{/* Нижня частина сторінки */}
+<div className="bottom-section">
+  {/* Банер подарунків */}
+  <section className="gift-banner">
+    <h2>Gifts are always nice</h2>
+    <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
+    <button className="learn-more-button">LEARN MORE</button>
+  </section>
+
+</div>
+</div>
+);
 };
 
 export default CatalogPage;

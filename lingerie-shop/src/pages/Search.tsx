@@ -10,8 +10,7 @@ const Search: React.FC = () => {
       <p>Here you can search for products.</p>
       
       {/* Тут можна додати форму пошуку та результатів */}
-      
-      <Footer /> {/* Додаємо футер */}
+    
     </div>
   );
 };
