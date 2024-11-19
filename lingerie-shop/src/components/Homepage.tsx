@@ -38,6 +38,8 @@ const Homepage: React.FC = () => {
   const [saleProducts, setSaleProducts] = useState<Product[]>([]);
   const [tailoringProducts, setTailoringProducts] = useState<Product[]>([]);
 
+
+
   // Fetch data for different product categories
   useEffect(() => {
     axios
@@ -62,7 +64,9 @@ const Homepage: React.FC = () => {
   }, []);
 
   return (
+  
     <div className="homepage">
+
       {/* Banner Section */}
       <section className="banner-section">
         <div className="banner-content">

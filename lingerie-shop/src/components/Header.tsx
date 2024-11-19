@@ -1,59 +1,83 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { Category, initialCategories } from '../models/category';
-import { BASE_URL } from '../config'; // Імпортуйте базовий URL
-import '../styles.scss'; // Імпорт SCSS файлу
+import '../styles.scss'; // Підключення SCSS файлу
 
 const Header = () => {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}/api/v1/categories`)
-      .then((response) => setCategories(response.data))
-      .catch((error) => console.error('Error fetching categories', error));
-  }, []);
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
 
   return (
     <header className="header">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Логотип та кнопка меню */}
-        <div className="flex items-center space-x-4">
-          <Link to="/">
-            <img src="/images/LOGO.png" alt="Lingerie Logo" className="h-10" />
-          </Link>
-          <button className="menu-button">
-            <img src="/images/components-icon.png" alt="Menu Icon" className="h-6 w-6" />
-            <span className="menu-text">Menu</span>
-          </button>
-        </div>
-
-        {/* Іконки для пошуку, профілю, улюблених і кошика */}
-        <div className="flex space-x-4">
-          <Link to="/search" title="Search">
-            <img src="/images/search-icon.png" alt="Search Icon" className="h-6" />
-          </Link>
-          <Link to="/profile" title="User Profile">
-            <img src="/images/user-icon.png" alt="User Icon" className="h-6" />
-          </Link>
-          <Link to="/favorites" title="Favorites">
-            <img src="/images/favorite-icon.png" alt="Favorite Icon" className="h-6" />
-          </Link>
-          <Link to="/cart" title="Cart">
-            <img src="/images/cart-icon.png" alt="Cart Icon" className="h-6" />
-          </Link>
+      {/* Верхня частина хедера */}
+      <div className="header-top">
+        <div className="container">
+          <div className="header-left">
+            <Link to="/">
+              <img src="/images/LOGO.png" alt="Lingerie Logo" className="header-logo" />
+            </Link>
+            <button className="menu-button" onClick={toggleMenu}>
+              <img src="/images/components-icon.png" alt="Menu Icon" className="menu-icon" />
+              <span>Menu</span>
+            </button>
+          </div>
+          <div className="header-right">
+            <Link to="/search">
+              <img src="/images/search-icon.png" alt="Search" />
+            </Link>
+            <Link to="/profile">
+              <img src="/images/user-icon.png" alt="Profile" />
+            </Link>
+            <Link to="/favorites">
+              <img src="/images/favorite-icon.png" alt="Favorites" />
+            </Link>
+            <Link to="/cart">
+              <img src="/images/cart-icon.png" alt="Cart" />
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Секція категорій під основним меню */}
-      <div className="categories-section">
-        {categories.map((category, index) => (
-          <button key={index} className="category-button">
-            {category.name}
-          </button>
-        ))}
+      {/* Горизонтальне меню категорій */}
+      <div className="header-categories">
+        <div className="container">
+          <nav>
+            <Link to="/new">NEW</Link>
+            <Link to="/sale">SALE</Link>
+            <Link to="/bras">BRAS</Link>
+            <Link to="/panties">PANTIES</Link>
+            <Link to="/sets">SETS</Link>
+            <Link to="/swimwear">SWIMWEAR</Link>
+            <Link to="/sleepwear">SLEEPWEAR</Link>
+            <Link to="/home-linen">HOME LINEN</Link>
+            <Link to="/individual-tailoring">INDIVIDUAL TAILORING</Link>
+          </nav>
+        </div>
       </div>
+
+      {/* Випадаюче меню */}
+      {menuVisible && (
+        <div className="menu-container">
+          <div className="menu-content">
+            <button className="close-button" onClick={toggleMenu}>✕</button>
+            <ul>
+              <li><Link to="/catalog">Catalog</Link></li>
+              <li><Link to="/new">New Arrivals</Link></li>
+              <li><Link to="/sale">Sale</Link></li>
+              <li><Link to="/bras">Bras</Link></li>
+              <li><Link to="/panties">Panties</Link></li>
+              <li><Link to="/swimwear">Swimwear</Link></li>
+              <li><Link to="/sleepwear">Sleepwear</Link></li>
+              <li><Link to="/home-linen">Home Linen</Link></li>
+              <li><Link to="/individual-tailoring">Individual Tailoring</Link></li>
+              <li><Link to="/sign-in">Sign In</Link></li>
+              <li><Link to="/sign-up">Sign Up</Link></li>
+            </ul>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
