@@ -18,15 +18,17 @@ const categories = [
   { id: 7, name: 'Swimwear' },
   { id: 8, name: 'Sleepwear' },
   { id: 9, name: 'Home Linen' },
-  { id: 10, name: 'Individual Tailoring' }
+  { id: 10, name: 'Individual Tailoring' },
 ];
 
 // Дані для продуктів
 const products = [
-  { id: 1, name: 'Silk Bra', price: 50, imageUrl: 'https://via.placeholder.com/150', category: 'Bras' },
-  { id: 2, name: 'Lace Panties', price: 20, imageUrl: 'https://via.placeholder.com/150', category: 'Panties' },
-  { id: 3, name: 'Lingerie Set', price: 75, imageUrl: 'https://via.placeholder.com/150', category: 'Lingerie' },
-  // Додай більше продуктів за бажанням
+  { id: 1, name: 'Silk Bra', price: 50, imageUrl: 'https://via.placeholder.com/150', category: 'Bras', color: 'Black' },
+  { id: 2, name: 'Lace Panties', price: 20, imageUrl: 'https://via.placeholder.com/150', category: 'Panties', color: 'White' },
+  { id: 3, name: 'Lingerie Set', price: 75, imageUrl: 'https://via.placeholder.com/150', category: 'Lingerie', color: 'Red' },
+  { id: 4, name: 'Summer Bikini', price: 100, imageUrl: 'https://via.placeholder.com/150', category: 'Swimwear', color: 'Blue' },
+  { id: 5, name: 'Night Robe', price: 60, imageUrl: 'https://via.placeholder.com/150', category: 'Sleepwear', color: 'Pink' },
+  { id: 6, name: 'Luxury Lingerie', price: 150, imageUrl: 'https://via.placeholder.com/150', category: 'Sets', color: 'Black' },
 ];
 
 // Ендпоінт для отримання категорій
@@ -34,22 +36,32 @@ app.get('/api/v1/categories', (req, res) => {
   res.json(categories);
 });
 
-// Ендпоінт для отримання товарів конкретної категорії
-app.get('/api/v1/category', (req, res) => {
-  const category = req.query.name;
-  const filteredProducts = products.filter(product => product.category === category);
-  res.json(filteredProducts);
-});
-
-// Ендпоінт для отримання всіх продуктів
+// Ендпоінт для отримання товарів із фільтрами
 app.get('/api/v1/products', (req, res) => {
-  res.json(products);
-});
+  let filteredProducts = [...products];
 
-// Ендпоінт для отримання акційних товарів (наприклад, з фільтром)
-app.get('/api/v1/sales', (req, res) => {
-  const salesProducts = products.slice(0, 2); // Перші два продукти як акційні
-  res.json(salesProducts);
+  // Фільтр за брендом
+  if (req.query.brand) {
+    const brands = Array.isArray(req.query.brand) ? req.query.brand : [req.query.brand];
+    filteredProducts = filteredProducts.filter(product => brands.includes(product.category));
+  }
+
+  // Фільтр за кольором
+  if (req.query.color) {
+    const colors = Array.isArray(req.query.color) ? req.query.color : [req.query.color];
+    filteredProducts = filteredProducts.filter(product => colors.includes(product.color));
+  }
+
+  // Фільтр за діапазоном цін
+  if (req.query.priceMin || req.query.priceMax) {
+    const priceMin = parseFloat(req.query.priceMin) || 0;
+    const priceMax = parseFloat(req.query.priceMax) || Infinity;
+    filteredProducts = filteredProducts.filter(
+      product => product.price >= priceMin && product.price <= priceMax
+    );
+  }
+
+  res.json(filteredProducts);
 });
 
 // Ендпоінт для отримання конкретного продукту
@@ -61,6 +73,12 @@ app.get('/api/v1/products/:id', (req, res) => {
   } else {
     res.status(404).json({ message: 'Product not found' });
   }
+});
+
+// Ендпоінт для акційних товарів
+app.get('/api/v1/sales', (req, res) => {
+  const salesProducts = products.slice(0, 2); // Перші два продукти як акційні
+  res.json(salesProducts);
 });
 
 // Ендпоінт для кошика

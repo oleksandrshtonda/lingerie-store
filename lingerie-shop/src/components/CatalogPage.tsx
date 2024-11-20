@@ -18,123 +18,194 @@ interface Product {
 }
 
 const CatalogPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  // Стан для фільтрів
   const [selectedFilters, setSelectedFilters] = useState({
-    brand: '',
-    color: '',
-    size: '',
-    priceRange: [0, 500],
+    brand: [] as string[], // Масив обраних брендів
+    color: [] as string[], // Масив обраних кольорів
+    size: [] as string[],  // Масив обраних розмірів
+    priceRange: [100, 500], // Діапазон цін
   });
 
-  const { addToFavorites } = useFavorites(); // Додаємо функцію addToFavorites
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { addToFavorites } = useFavorites();
 
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/api/v1/products`)
-      .then(response => setProducts(response.data))
-      .catch(error => console.error('Error fetching products', error));
+    fetchProducts();
   }, []);
-  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSelectedFilters({ ...selectedFilters, [name]: value });
+
+  const fetchProducts = () => {
+    setIsLoading(true);
+    axios
+      .get(`${BASE_URL}/api/v1/products`, { params: selectedFilters }) // Передаємо обрані фільтри на сервер
+      .then((response) => {
+        setProducts(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching products:', error);
+        setIsLoading(false);
+      });
+  };
+
+  const handleFilterChange = (category: keyof typeof selectedFilters, value: string) => {
+    setSelectedFilters((prevFilters) => {
+      const updatedCategory = prevFilters[category] as string[];
+  
+      const updatedValues = updatedCategory.includes(value)
+        ? updatedCategory.filter((item) => item !== value) // `item` вже визначено як рядок
+        : [...updatedCategory, value];
+  
+      return { ...prevFilters, [category]: updatedValues };
+    });
+  };
+
+  const handleSaveFilters = () => {
+    fetchProducts(); // Запит на сервер з оновленими фільтрами
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const updatedPriceRange = [...selectedFilters.priceRange];
+    updatedPriceRange[index] = Number(e.target.value);
+    setSelectedFilters({ ...selectedFilters, priceRange: updatedPriceRange });
   };
 
   return (
     <div className="catalog-page">
-      {/* Breadcrumb для навігації */}
       <Breadcrumb
         paths={[
           { label: 'Home', path: '/' },
           { label: 'Catalog', path: '/catalog' },
-          { label: 'Sets', path: '/catalog/sets' },
         ]}
       />
 
-      {/* Бокова панель з фільтрами */}
-      <aside className="filters">
-        <h3>Filters</h3>
-        <div className="filter-section">
-          <h4>Brand</h4>
-          <label>
-            <input type="checkbox" name="brand" value="Victoria's Secret" onChange={handleFilterChange} />
-            Victoria's Secret
-          </label>
-          <label>
-            <input type="checkbox" name="brand" value="Calvin Klein" onChange={handleFilterChange} />
-            Calvin Klein
-          </label>
-        </div>
-        <div className="filter-section">
-          <h4>Color</h4>
-          <label>
-            <input type="checkbox" name="color" value="Black" onChange={handleFilterChange} />
-            Black
-          </label>
-          <label>
-            <input type="checkbox" name="color" value="White" onChange={handleFilterChange} />
-            White
-          </label>
-        </div>
-        <div className="filter-section">
-          <h4>Size</h4>
-          <label>
-            <input type="checkbox" name="size" value="S" onChange={handleFilterChange} />
-            S
-          </label>
-          <label>
-            <input type="checkbox" name="size" value="M" onChange={handleFilterChange} />
-            M
-          </label>
-        </div>
-        <div className="filter-section">
-          <h4>Price</h4>
-          <input
-            type="range"
-            name="priceRange"
-            min="0"
-            max="500"
-            value={selectedFilters.priceRange[1]}
-            onChange={(e) =>
-              setSelectedFilters({
-                ...selectedFilters,
-                priceRange: [0, Number(e.target.value)],
-              })
-            }
-          />
-          <span>${selectedFilters.priceRange[1]}</span>
-        </div>
-      </aside>
-
-      {/* Сітка продуктів */}
-      <section className="product-grid">
-        <h2>Catalog of Sets</h2>
-        <div className="products">
-          {products.map((product) => (
-            <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
-              <div className="product-info">
-                <p className="product-name">{product.name}</p>
-                <p className="product-price">${product.price}</p>
-              </div>
-              <button className="favorite-button">♡</button>
+      <div className="catalog-content">
+        {/* Фільтри */}
+        <aside className="filters">
+          <h3>Filters</h3>
+          {/* Відображення брендів */}
+          <div className="filter-section">
+            <h4>Brand</h4>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('brand', 'Victoria\'s Secret')}
+                checked={selectedFilters.brand.includes('Victoria\'s Secret')}
+              />
+              Victoria's Secret
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('brand', 'Calvin Klein')}
+                checked={selectedFilters.brand.includes('Calvin Klein')}
+              />
+              Calvin Klein
+            </label>
+          </div>
+          {/* Відображення кольорів */}
+          <div className="filter-section">
+            <h4>Color</h4>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('color', 'Black')}
+                checked={selectedFilters.color.includes('Black')}
+              />
+              Black
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('color', 'White')}
+                checked={selectedFilters.color.includes('White')}
+              />
+              White
+            </label>
+          </div>
+          {/* Відображення розмірів */}
+          <div className="filter-section">
+            <h4>Size</h4>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('size', 'S')}
+                checked={selectedFilters.size.includes('S')}
+              />
+              S
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                onChange={() => handleFilterChange('size', 'M')}
+                checked={selectedFilters.size.includes('M')}
+              />
+              M
+            </label>
+          </div>
+          {/* Відображення діапазону цін */}
+          <div className="filter-section">
+            <h4>Price</h4>
+            <div className="price-range">
+              <label>
+                From
+                <input
+                  type="number"
+                  value={selectedFilters.priceRange[0]}
+                  onChange={(e) => handlePriceChange(e, 0)}
+                />
+              </label>
+              <label>
+                To
+                <input
+                  type="number"
+                  value={selectedFilters.priceRange[1]}
+                  onChange={(e) => handlePriceChange(e, 1)}
+                />
+              </label>
             </div>
-          ))}
-        </div>
-        <button className="load-more-button">+ VIEW MORE ITEMS</button>
+          </div>
+          <button className="save-filters-button" onClick={handleSaveFilters}>
+            Save Filters
+          </button>
+        </aside>
+
+        {/* Сітка продуктів */}
+        <section className="product-grid">
+          <h2>Catalog of Sets</h2>
+          {isLoading ? (
+            <p>Loading products...</p>
+          ) : (
+            <div className="products">
+              {products.map((product) => (
+                <div key={product.id} className="product-card">
+                  <img src={product.image} alt={product.name} />
+                  <div className="product-info">
+                    <p className="product-name">{product.name}</p>
+                    <p className="product-price">${product.price}</p>
+                  </div>
+                  <button
+                    className="favorite-button"
+                    onClick={() => addToFavorites(product)}
+                  >
+                    ♡
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <button className="load-more-button">+ VIEW MORE ITEMS</button>
         </section>
+      </div>
 
-{/* Нижня частина сторінки */}
-<div className="bottom-section">
-  {/* Банер подарунків */}
-  <section className="gift-banner">
-    <h2>Gifts are always nice</h2>
-    <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
-    <button className="learn-more-button">LEARN MORE</button>
-  </section>
-
-</div>
-</div>
-);
+      {/* Банер подарунків */}
+      <section className="gift-banner">
+        <h2>Gifts are always nice</h2>
+        <p>When ordering linen individually, you are guaranteed to receive a gift as a set of sleepwear.</p>
+        <button className="learn-more-button">LEARN MORE</button>
+      </section>
+    </div>
+  );
 };
 
 export default CatalogPage;

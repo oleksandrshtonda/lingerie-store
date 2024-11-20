@@ -9,10 +9,11 @@ const Profile: React.FC = () => {
       <p>Welcome to your profile page.</p>
       
       {/* Тут можна додати інформацію користувача, налаштування профілю тощо */}
-      
-      <Footer /> {/* Додаємо футер */}
+
+  
     </div>
   );
 };
+
 
 export default Profile;

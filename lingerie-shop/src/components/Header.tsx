@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CartIcon from './CartIcon'; // Компонент для значка кошика
+import { useFavorites } from '../store/FavoritesContext'; // Використовуємо контекст для улюблених товарів
 import '../styles.scss'; // Підключення SCSS файлу
 
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const { favorites } = useFavorites(); // Отримуємо улюблені товари
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
+  };
+
+  const closeMenu = () => {
+    setMenuVisible(false);
   };
 
   return (
@@ -30,12 +37,17 @@ const Header = () => {
             <Link to="/profile">
               <img src="/images/user-icon.png" alt="Profile" />
             </Link>
-            <Link to="/favorites">
-              <img src="/images/favorite-icon.png" alt="Favorites" />
-            </Link>
-            <Link to="/cart">
-              <img src="/images/cart-icon.png" alt="Cart" />
-            </Link>
+            {/* Значок улюблених */}
+            <div className="favorites-icon">
+              <Link to="/favorites">
+                <img src="/images/favorite-icon.png" alt="Favorites" />
+                {favorites.length > 0 && (
+                  <span className="badge">{favorites.length}</span>
+                )}
+              </Link>
+            </div>
+            {/* Значок кошика */}
+            <CartIcon />
           </div>
         </div>
       </div>
@@ -61,19 +73,65 @@ const Header = () => {
       {menuVisible && (
         <div className="menu-container">
           <div className="menu-content">
-            <button className="close-button" onClick={toggleMenu}>✕</button>
+            <button className="close-button" onClick={closeMenu}>
+              ✕
+            </button>
             <ul>
-              <li><Link to="/catalog">Catalog</Link></li>
-              <li><Link to="/new">New Arrivals</Link></li>
-              <li><Link to="/sale">Sale</Link></li>
-              <li><Link to="/bras">Bras</Link></li>
-              <li><Link to="/panties">Panties</Link></li>
-              <li><Link to="/swimwear">Swimwear</Link></li>
-              <li><Link to="/sleepwear">Sleepwear</Link></li>
-              <li><Link to="/home-linen">Home Linen</Link></li>
-              <li><Link to="/individual-tailoring">Individual Tailoring</Link></li>
-              <li><Link to="/sign-in">Sign In</Link></li>
-              <li><Link to="/sign-up">Sign Up</Link></li>
+              <li>
+                <Link to="/catalog" onClick={closeMenu}>
+                  Catalog
+                </Link>
+              </li>
+              <li>
+                <Link to="/new" onClick={closeMenu}>
+                  New Arrivals
+                </Link>
+              </li>
+              <li>
+                <Link to="/sale" onClick={closeMenu}>
+                  Sale
+                </Link>
+              </li>
+              <li>
+                <Link to="/bras" onClick={closeMenu}>
+                  Bras
+                </Link>
+              </li>
+              <li>
+                <Link to="/panties" onClick={closeMenu}>
+                  Panties
+                </Link>
+              </li>
+              <li>
+                <Link to="/swimwear" onClick={closeMenu}>
+                  Swimwear
+                </Link>
+              </li>
+              <li>
+                <Link to="/sleepwear" onClick={closeMenu}>
+                  Sleepwear
+                </Link>
+              </li>
+              <li>
+                <Link to="/home-linen" onClick={closeMenu}>
+                  Home Linen
+                </Link>
+              </li>
+              <li>
+                <Link to="/individual-tailoring" onClick={closeMenu}>
+                  Individual Tailoring
+                </Link>
+              </li>
+              <li>
+                <Link to="/sign-in" onClick={closeMenu}>
+                  Sign In
+                </Link>
+              </li>
+              <li>
+                <Link to="/sign-up" onClick={closeMenu}>
+                  Sign Up
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
