@@ -10,6 +10,7 @@ import { FavoritesProvider } from './store/FavoritesContext'; // Контекс�
 import { CartProvider } from './store/CartContext'; // Контекст для Cart
 import Homepage from './components/Homepage'; // Сторінка "Homepage"
 import CatalogPage from './components/CatalogPage'; // Сторінка "CatalogPage"
+import CheckoutPage from './pages/CheckoutPage'; // Сторінка "CheckoutPage"
 import SignIn from './pages/SignIn'; // Імпортуємо сторінку "SignIn"
 import SignUp from './pages/SignUp'; // Імпортуємо сторінку "SignUp"
 
@@ -32,6 +33,8 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               {/* Сторінка каталогу */}
               <Route path="/catalog" element={<CatalogPage />} />
+              {/* Сторінка оформлення замовлення */}
+              <Route path="/checkout" element={<CheckoutPage />} />
             </Routes>
           </main>
           <Footer /> {/* Додаємо футер у нижній частині */}
