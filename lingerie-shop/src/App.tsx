@@ -43,5 +43,9 @@ const App = () => {
     </FavoritesProvider>
   );
 };
+console.log('API URL:', process.env.REACT_APP_API_URL);
+console.log('API USER:', process.env.REACT_APP_API_USER);
+console.log('API PASS:', process.env.REACT_APP_API_PASS);
+
 
 export default App;
