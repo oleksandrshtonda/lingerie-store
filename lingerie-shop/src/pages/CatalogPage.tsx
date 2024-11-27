@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../utils/axiosInstance';
-import Breadcrumb from '../components/Breadcrumb';
-import { useFavorites } from '../store/FavoritesContext';
-import './CatalogPage.scss';
+import axiosInstance from '../utils/axiosInstance'; // Використовуємо кастомний axios для роботи з API
+import Breadcrumb from '../components/Breadcrumb'; // Компонент для показу шляху (навігації)
+import { useFavorites } from '../store/FavoritesContext'; // Використовуємо контекст для додавання в "Улюблене"
+import './CatalogPage.scss'; // Імпортуємо стилі
+import { getAllCategories } from '../services/CategoryService';
+import { searchProducts } from '../services/ProductService';
 
+
+// Інтерфейси для опису структури продукту та фільтрів
 interface Product {
   id: number;
   name: string;
@@ -31,15 +35,15 @@ interface SelectedFilters {
 }
 
 const CatalogPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]); // Список продуктів
+  const [isLoading, setIsLoading] = useState(false); // Стан завантаження
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     categories: [],
     brands: [],
     colors: [],
     sizes: [],
     styles: [],
-  });
+  }); // Опції для фільтрів
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     categories: [],
     brand: [],
@@ -49,14 +53,18 @@ const CatalogPage: React.FC = () => {
     fromPrice: 0,
     toPrice: 500,
     isSales: false,
-  });
-  const [error, setError] = useState<string>('');
-  const { addToFavorites } = useFavorites();
+  }); // Вибрані фільтри
+  const [error, setError] = useState<string>(''); // Для відображення помилок
+  const { addToFavorites } = useFavorites(); // Функція для додавання продукту в "Улюблене"
 
+  // Функція для отримання опцій фільтрів
   const fetchFilters = async () => {
     try {
-      const response = await axiosInstance.get('/filters');
-      setFilterOptions(response.data);
+      const categoriesResponse = await getAllCategories();
+      setFilterOptions((prev) => ({
+        ...prev,
+        categories: categoriesResponse.data.map((cat: any) => cat.name),
+      }));
       setError('');
     } catch (err) {
       console.error('Error fetching filter options:', err);
@@ -64,10 +72,11 @@ const CatalogPage: React.FC = () => {
     }
   };
 
+  // Функція для отримання продуктів (з урахуванням вибраних фільтрів)
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post('/products', selectedFilters);
+      const response = await searchProducts(selectedFilters);
       setProducts(response.data);
       setError('');
     } catch (err) {
@@ -78,11 +87,13 @@ const CatalogPage: React.FC = () => {
     }
   };
 
+  // Викликаємо fetchFilters і fetchProducts після першого рендера
   useEffect(() => {
     fetchFilters();
     fetchProducts();
   }, []);
 
+  // Функція для зміни фільтрів
   const handleFilterChange = (
     category: keyof SelectedFilters,
     value: string | number | boolean
@@ -101,11 +112,16 @@ const CatalogPage: React.FC = () => {
 
   return (
     <div className="catalog-page">
+      {/* Відображення помилок */}
       {error && <p className="error-message">{error}</p>}
+
+      {/* Навігаційний хлібний шлях */}
       <Breadcrumb
         paths={[{ label: 'Home', path: '/' }, { label: 'Catalog', path: '/catalog' }]}
       />
+
       <div className="catalog-content">
+        {/* Секція фільтрів */}
         <aside className="filters">
           <h3>Filters</h3>
           <div className="filter-section">
@@ -126,15 +142,17 @@ const CatalogPage: React.FC = () => {
           </button>
         </aside>
 
+        {/* Секція продуктів */}
         <section className="product-grid">
           {isLoading ? (
-            <p>Loading products...</p>
+            <p>Loading products...</p> // Відображення стану завантаження
           ) : (
             products.map((product) => (
               <div key={product.id} className="product-card">
                 <img src={product.image} alt={product.name} />
                 <p>{product.name}</p>
                 <p>${product.price.toFixed(2)}</p>
+                {/* Додавання в "Улюблене" */}
                 <button onClick={() => addToFavorites(product)}>♡ Add to Favorites</button>
               </div>
             ))

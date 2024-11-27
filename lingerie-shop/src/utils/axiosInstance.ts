@@ -5,7 +5,7 @@ const token = "cm9vdDpHZW5pdXM4Nw==";
 localStorage.setItem('authToken', token);
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.REACT_APP_API_URL || 'http://116.203.195.165:8080/api/v1', // Правильний базовий URL
   headers: {
     'Content-Type': 'application/json',
   },
