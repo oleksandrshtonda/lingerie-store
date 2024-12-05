@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '../utils/axiosInstance'; // Використовуємо кастомний axios для роботи з API
-import Breadcrumb from '../components/Breadcrumb'; // Компонент для показу шляху (навігації)
-import { useFavorites } from '../store/FavoritesContext'; // Використовуємо контекст для додавання в "Улюблене"
-import './CatalogPage.scss'; // Імпортуємо стилі
-import { getAllCategories } from '../services/CategoryService';
+import Breadcrumb from '../components/Breadcrumb';
+import { getAllCategories, getColors, getSizes } from '../services/CategoryService'; // Додано запити для кольорів і розмірів
 import { searchProducts } from '../services/ProductService';
+import './CatalogPage.scss';
 
-
-// Інтерфейси для опису структури продукту та фільтрів
+// Інтерфейси
 interface Product {
   id: number;
   name: string;
@@ -17,113 +14,115 @@ interface Product {
 
 interface FilterOptions {
   categories: string[];
-  brands: string[];
   colors: string[];
   sizes: string[];
-  styles: string[];
+  brands: string[];
 }
 
 interface SelectedFilters {
   categories: string[];
-  brand: string[];
-  color: string[];
-  size: string[];
-  style: string[];
-  fromPrice: number;
-  toPrice: number;
-  isSales: boolean;
+  colors: string[];
+  sizes: string[];
+  brands: string[];
+  available: string;
+  priceRange: [number, number];
 }
 
 const CatalogPage: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]); // Список продуктів
-  const [isLoading, setIsLoading] = useState(false); // Стан завантаження
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     categories: [],
-    brands: [],
     colors: [],
     sizes: [],
-    styles: [],
-  }); // Опції для фільтрів
+    brands: [],
+  });
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     categories: [],
-    brand: [],
-    color: [],
-    size: [],
-    style: [],
-    fromPrice: 0,
-    toPrice: 500,
-    isSales: false,
-  }); // Вибрані фільтри
-  const [error, setError] = useState<string>(''); // Для відображення помилок
-  const { addToFavorites } = useFavorites(); // Функція для додавання продукту в "Улюблене"
+    colors: [],
+    sizes: [],
+    brands: [],
+    available: '',
+    priceRange: [100, 500],
+  });
 
-  // Функція для отримання опцій фільтрів
-  const fetchFilters = async () => {
-    try {
-      const categoriesResponse = await getAllCategories();
+  useEffect(() => {
+    // Завантаження опцій фільтрів
+    getAllCategories().then((response) => {
       setFilterOptions((prev) => ({
         ...prev,
-        categories: categoriesResponse.data.map((cat: any) => cat.name),
+        categories: response.data.map((cat: any) => cat.name),
       }));
-      setError('');
-    } catch (err) {
-      console.error('Error fetching filter options:', err);
-      setError('Failed to fetch filter options.');
-    }
-  };
+    });
 
-  // Функція для отримання продуктів (з урахуванням вибраних фільтрів)
+    getColors().then((response) => {
+      setFilterOptions((prev) => ({
+        ...prev,
+        colors: response.data.map((color: any) => color.name),
+      }));
+    });
+
+    getSizes().then((response) => {
+      setFilterOptions((prev) => ({
+        ...prev,
+        sizes: response.data.map((size: any) => size.name),
+      }));
+    });
+
+    // Завантаження продуктів
+    fetchProducts();
+  }, []);
+
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
       const response = await searchProducts(selectedFilters);
       setProducts(response.data);
-      setError('');
-    } catch (err) {
-      console.error('Error fetching products:', err);
-      setError('Failed to fetch products.');
+    } catch (error) {
+      console.error('Failed to fetch products:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Викликаємо fetchFilters і fetchProducts після першого рендера
-  useEffect(() => {
-    fetchFilters();
-    fetchProducts();
-  }, []);
-
-  // Функція для зміни фільтрів
   const handleFilterChange = (
-    category: keyof SelectedFilters,
-    value: string | number | boolean
+    key: keyof SelectedFilters,
+    value: string | [number, number]
   ) => {
-    setSelectedFilters((prevFilters) => {
-      if (Array.isArray(prevFilters[category])) {
-        const updatedCategory = prevFilters[category] as string[];
-        const updatedValues = updatedCategory.includes(value as string)
-          ? updatedCategory.filter((item) => item !== value)
-          : [...updatedCategory, value as string];
-        return { ...prevFilters, [category]: updatedValues };
+    setSelectedFilters((prev) => {
+      if (Array.isArray(prev[key])) {
+        const arrayValue = prev[key] as string[];
+        const updatedArray = arrayValue.includes(value as string)
+          ? arrayValue.filter((item) => item !== value)
+          : [...arrayValue, value as string];
+        return { ...prev, [key]: updatedArray };
       }
-      return { ...prevFilters, [category]: value };
+      return { ...prev, [key]: value };
     });
+  };
+
+  const handleSaveFilters = () => {
+    fetchProducts();
   };
 
   return (
     <div className="catalog-page">
-      {/* Відображення помилок */}
-      {error && <p className="error-message">{error}</p>}
-
-      {/* Навігаційний хлібний шлях */}
+      {/* Breadcrumb */}
       <Breadcrumb
-        paths={[{ label: 'Home', path: '/' }, { label: 'Catalog', path: '/catalog' }]}
+        paths={[
+          { label: 'Home', path: '/' },
+          { label: 'Catalog', path: '/catalog' },
+        ]}
       />
+      <h1 className="catalog-title">Catalog of Sets</h1>
+      <p className="catalog-subtitle">Found {products.length} products</p>
 
       <div className="catalog-content">
-        {/* Секція фільтрів */}
+        {/* Filters */}
         <aside className="filters">
           <h3>Filters</h3>
+
+          {/* Categories */}
           <div className="filter-section">
             <h4>Categories</h4>
             {filterOptions.categories.map((category) => (
@@ -137,23 +136,81 @@ const CatalogPage: React.FC = () => {
               </label>
             ))}
           </div>
-          <button className="save-filters-button" onClick={fetchProducts}>
-            Save Filters
+
+          {/* Colors */}
+          <div className="filter-section">
+            <h4>Colors</h4>
+            {filterOptions.colors.map((color) => (
+              <label key={color}>
+                <input
+                  type="checkbox"
+                  onChange={() => handleFilterChange('colors', color)}
+                  checked={selectedFilters.colors.includes(color)}
+                />
+                {color}
+              </label>
+            ))}
+          </div>
+
+          {/* Sizes */}
+          <div className="filter-section">
+            <h4>Sizes</h4>
+            {filterOptions.sizes.map((size) => (
+              <label key={size}>
+                <input
+                  type="checkbox"
+                  onChange={() => handleFilterChange('sizes', size)}
+                  checked={selectedFilters.sizes.includes(size)}
+                />
+                {size}
+              </label>
+            ))}
+          </div>
+
+          {/* Price Range */}
+          <div className="filter-section">
+            <h4>Price</h4>
+            <div className="price-range">
+              <input
+                type="number"
+                value={selectedFilters.priceRange[0]}
+                onChange={(e) =>
+                  handleFilterChange('priceRange', [
+                    +e.target.value,
+                    selectedFilters.priceRange[1],
+                  ])
+                }
+              />
+              <span>-</span>
+              <input
+                type="number"
+                value={selectedFilters.priceRange[1]}
+                onChange={(e) =>
+                  handleFilterChange('priceRange', [
+                    selectedFilters.priceRange[0],
+                    +e.target.value,
+                  ])
+                }
+              />
+            </div>
+          </div>
+
+          {/* Save Filters Button */}
+          <button className="save-filters-button" onClick={handleSaveFilters}>
+            Apply Filters
           </button>
         </aside>
 
-        {/* Секція продуктів */}
+        {/* Product Grid */}
         <section className="product-grid">
           {isLoading ? (
-            <p>Loading products...</p> // Відображення стану завантаження
+            <p>Loading products...</p>
           ) : (
             products.map((product) => (
               <div key={product.id} className="product-card">
                 <img src={product.image} alt={product.name} />
-                <p>{product.name}</p>
-                <p>${product.price.toFixed(2)}</p>
-                {/* Додавання в "Улюблене" */}
-                <button onClick={() => addToFavorites(product)}>♡ Add to Favorites</button>
+                <p className="product-name">{product.name}</p>
+                <p className="product-price">${product.price.toFixed(2)}</p>
               </div>
             ))
           )}
