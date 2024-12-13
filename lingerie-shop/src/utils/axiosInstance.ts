@@ -1,15 +1,13 @@
 import axios from 'axios';
-
-export const BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8080/api/v1';
-const token = "cm9vdDpHZW5pdXM4Nw==";
-localStorage.setItem('authToken', token);
+import API_BASE_URL from '../config';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://116.203.195.165:8080/api/v1', // Правильний базовий URL
+  baseURL: API_BASE_URL, // Базовий URL до бекенду
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
 
 axiosInstance.interceptors.request.use(
   (config) => {

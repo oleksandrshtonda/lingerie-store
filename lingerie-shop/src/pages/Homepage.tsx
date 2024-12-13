@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {
-  getNewCollection,
-  getBestSellers,
-  getTailoringProducts,
-} from '../services/ProductService';
+import { getNewCollection, getBestSellers, getTailoringProducts } from '../services/ProductService';
+
 import './Homepage.scss';
 import ArrowIcon from '../components/ArrowIcon';
 
@@ -59,6 +56,7 @@ const Homepage: React.FC = () => {
         console.error('Error fetching sale products:', error);
         setError('Failed to load sale products.');
       });
+
     getTailoringProducts().then((response) => setTailoringProducts(response.data));
   }, []);
 
@@ -80,6 +78,7 @@ const Homepage: React.FC = () => {
       }
     });
   };
+
 
   return (
     <div className="homepage">

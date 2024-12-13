@@ -1,9 +1,15 @@
 import React from 'react';
 
-const ArrowIcon = ({ color }: { color: string }) => (
+interface ArrowIconProps {
+  color: string;
+  width?: number;
+  height?: number;
+}
+
+const ArrowIcon: React.FC<ArrowIconProps> = ({ color, width = 24, height = 12 }) => (
   <svg
-    width="24"
-    height="12"
+    width={width}
+    height={height}
     viewBox="0 0 24 12"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

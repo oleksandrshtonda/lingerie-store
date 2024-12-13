@@ -8,7 +8,7 @@ interface BreadcrumbProps {
 
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ paths }) => {
   return (
-    <nav className="breadcrumb">
+    <nav aria-label="breadcrumb" className="breadcrumb">
       {paths.map((path, index) => (
         <span key={index} className="breadcrumb-item">
           {index < paths.length - 1 ? (
