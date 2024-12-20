@@ -18,6 +18,7 @@ yarn.lock
 # IDE files
 .idea/
 .vscode/
+.editorconfig
 
 # Logs
 *.log
